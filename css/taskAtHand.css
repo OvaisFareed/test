@@ -1,0 +1,76 @@
+
+
+body
+{
+ font: 1em Verdana, Geneva, sans-serif;
+ padding: 0;
+ margin: 5px;
+ color: Black;
+ background-color: pink;
+}
+div
+{
+ padding: 0;
+ margin: 0;
+}
+button
+{
+ cursor: pointer;
+}
+.hidden
+{
+ display: none;
+}
+
+
+#app
+{
+ margin: 4px;
+ background-color: #bbc;
+}
+#app>header
+{
+ padding: 0 0.5em;
+ font-size: 1.5em;
+ color: WhiteSmoke;
+ background-color: #006;
+}
+#app>footer
+{
+ padding: 0.25em;
+ color: WhiteSmoke;
+ background-color: #006;
+}
+#main
+{
+ margin: 1em;
+}
+
+#div>logo
+{
+position: relative;
+	height: 100%;
+	}
+div#title
+{
+position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+font-family: 'Indie Flower', cursive;
+	font-size: 2.8em;
+
+
+}
+.moreTask
+{
+border-radius:50%;
+
+}
+
+
+
+
+
+
+

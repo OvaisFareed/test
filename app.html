@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Task@Hand</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="css/taskAtHand.css" rel="StyleSheet" />
+    <script src="js/index.js"></script>
+</head>
+
+
+<body>
+ <div id="app">
+ <header>Task@Hand</header>
+ <div id="main">
+ <div id="add-task">
+ <label for="new-task-name">Add a task</label>
+ <input type="text" id="new-task-name" title="Enter a task name" placeholder="Enter a task name" onkeypress="submit(event);"/>
+ </div>
+ <ul id="task-list">
+ </ul>
+ </div>
+ <footer>
+ </footer>
+ </div>
+
+<div>
+    <div id="templates" class="hidden">
+		<div id="task-template"></div>
+    </div>
+</div>
+</body>
+</html>
