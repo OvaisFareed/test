@@ -1,7 +1,7 @@
 // All Views are controlled from here
 
 //========== Global Variables ============
-var value = '', array = [], index = 0, found = false;
+var value = '', array = [], index = 0, found = false, task = '', taskId = '', elementNo = 0;
 // <li class="task">
 var buttons = `<div class="tools">
 <button class="delete" title="Delete">X</button>
@@ -44,14 +44,53 @@ function create(){
 
 // show Linked List status
 function submit(e) {
-    if(e.keyCode == 13){
-            createElements('LI', buttons + e.target.value + editField, 'task-list');
+    if (e.keyCode == 13) {
+        task = e.target.value;
+        taskId = 'task' + elementNo;
+        createElements('LI', task, 'task-list');
+        document.getElementsByTagName('li')[elementNo].setAttribute('id', taskId);
+        elementNo++;        
+        createElements('BUTTON', '^', taskId, 'move-up');
+        createElements('BUTTON', 'v', taskId, 'move-down');
+        createElements('BUTTON', 'x', taskId, 'delete');
+        createElements('BUTTON', 'edit', taskId, 'edit');
+        document.querySelectorAll('button').forEach(function(ele) {
+           switch(ele.className){
+               case 'move-up': {
+                ele.addEventListener("click", asd);
+                break;               
+               }
+               case 'move-down': {
+                ele.addEventListener("click", asd);
+                break;             
+               }
+               case 'delete': {
+                ele.addEventListener("click", deleteElement);
+                break;
+               }
+               case 'edit': {
+                ele.addEventListener("click", qwe);
+                break;               
+               }
+               default: {
+                   console.log('no class matched');
+               }
+           }     
+        })
+        array.push(taskId);
+        setArray(array);
+        document.getElementById('new-task-name').value = '';
+        
     }
      
 }
 
-function asd(e){
-    console.log('e', e);
+function asd(){
+    console.log('asd clicked!');
+}
+
+function qwe(){
+    console.log('qwe clicked!');
 }
 // insert Element At Last index of Linked List
 function addAtLast() {
@@ -73,14 +112,15 @@ function addAtLast() {
 }
 
 // delete Element from Linked List
-function deleteElement(){
+function deleteElement(e){
+    console.log('delete', e.target.parentElement.id);
     found = false;
-    value = document.getElementById('element').value;
+    value = e.target.parentElement.id;
     if(value) {
         array = getArray();
         if (array.length) {
-            array.forEach(function (node, idx) {
-                if (value == node.element) {
+            array.forEach(function (element, idx) {
+                if (value == element) {
                     index = idx;
                     found = true;
                 }
@@ -88,17 +128,10 @@ function deleteElement(){
             if (found) {
                 array.splice(index, 1);
                 setArray(array);
-                arrayStatus(true, 'Linked List: ');
             }
         }
-        else {
-            alert('Linked List not exists \n create first..')
-
-        }
     }
-    else {
-        alert('field must be fill..');
-    }
+    
 }
 
 // update Element in Linked List
@@ -219,13 +252,10 @@ function getArray(){
 }
 
 // create Elements in DOM
-function createElements(elementName, innerText, parentId){
-    console.log('elementName: ', elementName);
-    console.log('innerText: ', innerText);
-    console.log('parentId: ', parentId);
+function createElements(elementName, innerText, parentId, className){
     var node = document.createElement(elementName);
-    // node.className = 'task';
-    var textNode = document.createTextNode('asd');
+    node.classList.add(className);
+    var textNode = document.createTextNode(innerText);
     node.appendChild(textNode);
     document.getElementById(parentId).appendChild(node);
 }
