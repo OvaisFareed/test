@@ -2,14 +2,12 @@
 
 //========== Global Variables ============
 var value = '', array = [], index = 0, found = false, task = { id: '', value: '' }, taskId = '', elementNo = 0, isEdit = false;
+
+// load tasks after 1 second, so that html loaded before it 
+setTimeout(function() {
+    loadAllTasks();    
+}, 1000);
 //============== End ===============
-
-// node's Constructor
-function Node(element, next) {
-    this.element = element;
-    this.next = next;
-}
-
 
 //========== Main Functions ==============
 
@@ -29,15 +27,10 @@ function loadAllTasks() {
     }
 }
 
-setTimeout(function() {
-    loadAllTasks();    
-}, 1000);
-
-
 // add/update task
-function submit(e) {
-    if (e.keyCode == 13) {
-        task.value = e.target.value;
+function submit(event) {
+    if (event.keyCode == 13) {
+        task.value = event.target.value;
         if(task.value){
             if(isEdit){
                 updateTask();
@@ -62,13 +55,13 @@ function addTask(){
     document.getElementById('new-task-name').value = '';
     task = {};
 }
+
 // edit task in the list
-function editTask(e){
-    console.log('edit', e.target.parentElement.id);
-    e.target.classList.add('hidden');
+function editTask(event){
+    event.target.classList.add('hidden');
     isEdit = true;
     document.getElementsByClassName('hidden')[0].classList.remove('hidden');
-    var id = e.target.parentElement.id;
+    var id = event.target.parentElement.id;
     if(id) {
         array = getArray();
         if (array.length) {
@@ -84,10 +77,9 @@ function editTask(e){
 
 
 // delete Task from List
-function deleteTask(e){
-    console.log('delete', e.target.parentElement.id);
+function deleteTask(event){
     found = false;
-    var id = e.target.parentElement.id;
+    var id = event.target.parentElement.id;
     if(id) {
         array = getArray();
         if (array.length) {
@@ -127,148 +119,110 @@ function updateTask(){
             }
         }
         else {
-            alert('Linked List not exists \n create first..')
+            alert('Task List not exists \n create first..')
         }
     }
     else {
         alert('field must be fill..');
+    }
+}
+
+// move task upward
+function moveUp(event){
+    task = {};
+    var id = event.target.parentElement.id;
+    if(id) {
+        array = getArray();
+        if (array.length) {
+            index = 0;
+            array.forEach(function (savedTask, idx) {
+                if (id == savedTask.id) {
+                    index = idx;
+                    task = savedTask;
+                }
+            });
+            if (task) {
+                if (index - 1 >= 0) {
+                    var temp = array[index - 1];
+                    array[index - 1] = task;
+                    array[index] = temp;
+                    setArray(array);
+                    loadAllTasks();
+                }
+            }
+        }
+    }
+    
+}
+
+// move task downward
+function moveDown(event){   
+    task = {};
+    var id = event.target.parentElement.id;
+    if(id) {
+        array = getArray();
+        if (array.length) {
+            index = 0;
+            array.forEach(function (savedTask, idx) {
+                if (id == savedTask.id) {
+                    index = idx;
+                    task = savedTask;
+                }
+            });
+            if (task) {
+                if(index + 1 < array.length){
+
+                    var temp = array[index + 1];
+                    array[index  + 1] = task;
+                    array[index] = temp;
+                    setArray(array);
+                    loadAllTasks();
+                }
+            }
+        }
     }
 }
 
 //============== End ===============
 
-// insert Before any node
-function insertNodeBefore(){
-    value = document.getElementById('element').value;
-    var newElement = document.getElementById('newElement').value;
-    if(value && newElement) {
-
-        array = getArray();
-        if (array.length) {
-            array.forEach(function (node, idx) {
-                if (value == node.element) {
-                    index = idx;
-                }
-            });
-            if (index !== -1) {
-                array.splice(index, 0, new Node(newElement, array[index + 1]));
-                setArray(array);
-                arrayStatus(true, 'Linked List: ');
-            }
-        }
-        else {
-            alert('Linked List not exists \n create first..');
-        }
-    }
-    else {
-        alert('field must be fill..');
-    }
-}
-
-// insertAfter
-function insertAfter(){
-    value = document.getElementById('element').value;
-    if(value) {
-        var newElement = document.getElementById('newElement').value;
-
-        array = getArray();
-        if (array.length) {
-            array.forEach(function (node, idx) {
-                if (value == node.element) {
-                    index = idx;
-                }
-            });
-            if (index !== -1) {
-                array.splice(index + 1, 0, new Node(newElement, array[index + 1]));
-                setArray(array);
-                arrayStatus(true, 'Linked List: ');
-            }
-        }
-        else {
-            alert('Linked List not exists \n create first..');
-        }
-    }
-
-    else {
-        alert('field must be fill..');
-    }
-}
-
-// addAtFirst
-function addAtFirst(){
-    value = document.getElementById('element').value;
-    if(value) {
-        array = getArray();
-        if (!array.length) {
-            alert('Linked List not exists \n create first..')
-        }
-        else {
-            array.unshift(new Node(value, null));
-            setArray(array);
-            arrayStatus(true, 'Linked List :');
-        }
-    }
-    else {
-        alert('field must be fill..');
-    }
-}
-
-// insert Element At Last index of Linked List
-function addAtLast() {
-    value = document.getElementById('element').value;
-    if(value) {
-        array = getArray();
-        if (!array.length) {
-            alert('Linked List not exists \n create first..')
-        }
-        else {
-            array.push(new Node(value, null));
-            setArray(array);
-            arrayStatus(true, 'Linked List: ');
-        }
-    }
-    else {
-        alert('field must be fill..');
-    }
-}
-
 //========== Helper Functions ==========
 
-// set Linked List in Local Storage
+// set Task List in Local Storage
 function setArray(array){
     localStorage.setItem('list', JSON.stringify(array));
 }
 
-// get Linked List from local Storage
+// get Task List from local Storage
 function getArray(){
     return JSON.parse(localStorage.getItem('list')) || [];
 }
 
 // generate task list
 function generateTaskList(taskId, task) {
-    createElements('LI', task, 'task-list');
+    createElements('LI', '', 'task-list');
     document.getElementsByTagName('li')[elementNo].setAttribute('id', taskId);
     elementNo++;        
+    createElements('SPAN', task, taskId, 'task');
     createElements('BUTTON', '^', taskId, 'move-up');
     createElements('BUTTON', 'v', taskId, 'move-down');
     createElements('BUTTON', 'x', taskId, 'delete');
     createElements('BUTTON', 'edit', taskId, 'edit');
-    document.querySelectorAll('button').forEach(function(ele) {
-       switch(ele.className){
+    document.querySelectorAll('button').forEach(function(element) {
+       switch(element.className){
            case 'move-up': {
-            ele.addEventListener("click", asd);
+            element.addEventListener("click", moveUp);
             break;               
            }
            case 'move-down': {
-            ele.addEventListener("click", asd);
+            element.addEventListener("click", moveDown);
             break;             
            }
            case 'delete': {
-            ele.addEventListener("click", deleteTask);
+            element.addEventListener("click", deleteTask);
             break;
            }
            case 'edit': {
-            ele.addEventListener("click", editTask);
+            element.addEventListener("click", editTask);
             break;               
            }
            default: {
@@ -276,14 +230,6 @@ function generateTaskList(taskId, task) {
            }
        }     
     })
-}
-
-function asd(){
-    console.log('asd clicked!');
-}
-
-function qwe(){
-    console.log('qwe clicked!');
 }
 
 // create Elements in DOM
