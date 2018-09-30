@@ -68,6 +68,46 @@ border-radius:50%;
 
 }
 
+/* updates in style starts from here */
+#task-list button {
+	color: white;	
+	border-radius: 100px;
+	width: 30px;
+	height: 30px;
+	margin-left: 5px;
+}
+.move-up {
+	background: green;
+	margin-left: 10px;
+}
+
+.move-down{
+	background: green;
+}
+
+.delete{
+	background: red;	
+}
+
+.edit {
+	background: blue;
+	width: 40px !important;	
+}
+
+#task-list {
+	list-style: none;
+	padding-left: 0;
+}
+
+#task-list li {
+	font-family: 'Times New Roman';
+	font-size: 22px;
+}
+
+.task {
+	float: left;
+	min-width: 300px;
+}
 
 
 
